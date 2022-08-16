@@ -31,3 +31,12 @@ const creationArticles = async () => {
 
 
 creationArticles();
+
+let _id = [];
+
+for (let i = 0; i< articles.length; i++) {
+    articles.forEach((articles,i) =>
+    _id[i] = articles._id)
+}
+
+console.log(_id)
