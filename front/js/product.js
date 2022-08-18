@@ -1,9 +1,8 @@
 let params = new URLSearchParams(window.location.search);
 //peut-on utiliser (document.location.search) ?
-let productId = params.get("id");
+let productId = params.get("id");  //récuperer l'id
 console.log(productId);
  
-//récuperer l'id
 
 
 let products = [];
@@ -30,6 +29,25 @@ const productDisplay = async () => {
     document.getElementById("title").innerHTML = ` <h1 id="title">${products.name}</h1>`
     document.getElementById("price").innerHTML = `<span id="price">${products.price}</span>`
     document.getElementById("description").innerHTML = `<p id="description">${products.description}</p>`
+    //ajout des couleurs
+
+    //création balise select + récupérer l'id
+    let select = document.getElementById("colors")
+    console.log(products.colors)
+
+    //faire une boucle dans le tableau avec forEach
+    products.colors.forEach((couleurs) => {
+        //a chaque fois qu'il fait un tour on lui demande de créer un élément
+        let tagOption = document.createElement("option");
+
+        //injecter du texte dans l'élement qu'on a créé
+        tagOption.innerHTML = `${couleurs}`;
+        tagOption.value = `${couleurs}`;     // donner une value à l'option
+
+        select.appendChild(tagOption) //tagOption est devenu l'enfant de select
+
+
+    })
 };
 
 
