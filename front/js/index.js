@@ -21,9 +21,9 @@ const creationArticles = async () => {
     for (let article of articles) {
         document.getElementById("items").innerHTML += ` <a href="./product.html?id=${article._id}">
     <article>
-      <img src="${articles.imageUrl}" alt="${articles.altTxt}">
-      <h3 class="productName">${articles.name}</h3>
-      <p class="productDescription">${articles.description}</p>
+      <img src="${article.imageUrl}" alt="${article.altTxt}">
+      <h3 class="productName">${article.name}</h3>
+      <p class="productDescription">${article.description}</p>
     </article>
   </a> `
     }
@@ -32,11 +32,4 @@ const creationArticles = async () => {
 
 creationArticles();
 
-let _id = [];
 
-for (let i = 0; i< articles.length; i++) {
-    articles.forEach((articles,i) =>
-    _id[i] = articles._id)
-}
-
-console.log(_id)
