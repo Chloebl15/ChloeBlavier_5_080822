@@ -47,9 +47,30 @@ const productDisplay = async () => {
         select.appendChild(tagOption) //tagOption est devenu l'enfant de select
 
 
-    })
+    });
+    addBasket()
 };
 
 
 productDisplay ();
 
+
+const addBasket = () => {
+    
+    let button = document.getElementById("addToCart")
+    console.log(button)
+    button.addEventListener("click", () => {
+        let productTable = JSON.parse(localStorage.getItem("localStorageProduct")) // Variable pour vérifier ce qu'il y a dans le local storage
+        let select = document.getElementById("colors")
+        console.log(select);
+        console.log(productTable) //null 
+
+        if(productTable == null) {    //si le produit tableau est null 
+            productTable = []         //produit tableau est un tableau vide
+            productTable.push(products) // produit tableau push ce qu'on a récupérér dans products
+            console.log(productTable)
+            
+            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+        }
+    })
+}
