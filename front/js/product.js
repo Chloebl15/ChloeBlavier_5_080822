@@ -48,7 +48,7 @@ const productDisplay = async () => {
 
 
     });
-    addBasket()
+    addBasket()  // on appelle la fonction dans productDisplay
 };
 
 
@@ -62,15 +62,44 @@ const addBasket = () => {
     button.addEventListener("click", () => {
         let productTable = JSON.parse(localStorage.getItem("localStorageProduct")) // Variable pour vérifier ce qu'il y a dans le local storage
         let select = document.getElementById("colors")
-        console.log(select);
+        let quantity = document.getElementById("quantity")
+        console.log(select.value);
         console.log(productTable) //null 
 
-        if(productTable == null) {    //si le produit tableau est null 
-            productTable = []         //produit tableau est un tableau vide
-            productTable.push(products) // produit tableau push ce qu'on a récupérér dans products
-            console.log(productTable)
-            
-            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+        const newProduct = {
+            color : select.value, 
+            quantity : quantity.value,
+            id : productId
         }
+
+        if(productTable == null) {    //si le produit tableau est null 
+            productTable = []
+        
+
+            console.log(newProduct)
+            productTable.push(newProduct)
+            //Envoyer dans le local storage avec .setItem .   On transforme le tableau (ProductTable) en string pour le stocker dans le localstorage.
+            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+
+        }
+
+        else if(productTable !== null) {
+            console.log("le local storage n'est pas vide")
+            console.log(productTable)
+            const findObject = productTable.find(
+                (element) =>
+                  element.id === productId && element.color === select.value
+              );
+              console.log("objet", findObject);
+
+              if (findObject) {
+                findObject = findObject + quantity.value
+              }
+              else {
+                productTable.push(newProduct)
+                localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+              }
+
+        }   
     })
 }
