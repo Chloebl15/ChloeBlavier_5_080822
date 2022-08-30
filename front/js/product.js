@@ -2,14 +2,13 @@ let params = new URLSearchParams(window.location.search);
 //peut-on utiliser (document.location.search) ?
 let productId = params.get("id");  //récuperer l'id
 console.log(productId);
- 
 
 
 let products = [];
 
 const getProducts = async () => {
-    await fetch (`http://localhost:3000/api/products/${productId}`)
-    .then((res) => res.json())
+    await fetch(`http://localhost:3000/api/products/${productId}`)
+        .then((res) => res.json())
         .then((data) => {
             products = data
             console.log(products)
@@ -24,7 +23,7 @@ const getProducts = async () => {
 
 
 const productDisplay = async () => {
-    await getProducts ();
+    await getProducts();
     document.querySelector(`.item__img`).innerHTML = ` <img src="${products.imageUrl}" alt="${products.altTxt}">`
     document.getElementById("title").innerHTML = ` <h1 id="title">${products.name}</h1>`
     document.getElementById("price").innerHTML = `<span id="price">${products.price}</span>`
@@ -52,11 +51,11 @@ const productDisplay = async () => {
 };
 
 
-productDisplay ();
+productDisplay();
 
 
 const addBasket = () => {
-    
+
     let button = document.getElementById("addToCart")
     console.log(button)
     button.addEventListener("click", () => {
@@ -66,15 +65,27 @@ const addBasket = () => {
         console.log(select.value);
         console.log(productTable) //null 
 
+     
+
+
+
+        // Si color non sélectionnée : afficher message d'erreur en face de l'input
+        // Si qté n'est pas bonne : afficher message d'erreur en face de l'input
+        // Si tout va bien, tout est rempli, on peut passer à la suite
+
+        // Création du produit à ajouter
         const newProduct = {
-            color : select.value, 
-            quantity : quantity.value,
-            id : productId
+            color: select.value,
+            quantity: quantity.value,
+            id: productId
         }
 
-        if(productTable == null) {    //si le produit tableau est null 
+        //popup
+
+
+        // SI aucun produit dans le LS
+        if (productTable == null) {    //si le produit tableau est null 
             productTable = []
-        
 
             console.log(newProduct)
             productTable.push(newProduct)
@@ -83,23 +94,60 @@ const addBasket = () => {
 
         }
 
-        else if(productTable !== null) {
-            console.log("le local storage n'est pas vide")
-            console.log(productTable)
-            const findObject = productTable.find(
-                (element) =>
-                  element.id === productId && element.color === select.value
-              );
-              console.log("objet", findObject);
 
-              if (findObject) {
-                findObject = findObject + quantity.value
-              }
-              else {
+        
+        // Si le LocalStorage tableau n'est pas null
+        else if (productTable !== null) {
+            console.log("le local storage n'est pas vide")
+            console.log("Mon localstorage", productTable)
+
+
+            // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
+            let findIndexObject = productTable.findIndex(
+                (element) =>
+                    element.id === productId && element.color === select.value
+            );
+            console.log("index du produit si trouvé", findIndexObject);
+
+            if (findIndexObject > -1) {
+                // On ajuste la quantité
+                productTable[findIndexObject].quantity = parseInt(productTable[findIndexObject].quantity) + parseInt(newProduct.quantity);
+                console.log("LS avec quantité ajustée", productTable[findIndexObject])
+                // On met à jour le LS
+                localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+            }
+            // Si le produit n'existe pas dans le LS
+            else {
+                // On a juste à pousser le nouveau produit dans le LS
                 productTable.push(newProduct)
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-              }
+            }
+            
+        }
 
-        }   
+
+
+        // pop-up 
+        const popupAlert = () => {
+            
+        }
+        
+        if(select.value == '') {
+            (window.alert (`Veuillez sélectionner une couleur s'il vous plaît.`))
+        }
+
+        else if (quantity.value <1 ) {
+            (window.alert (`Veuillez sélectionner une quantité s'il vous plaît.`))
+        }
+
+        else {
+    
+            (window.confirm (`Le canapé ${products.name} de couleur ${select.value} a bien été ajouté au panier.`))
+        }
+
+        popupAlert();
+        
     })
+    
+    
 }
