@@ -4,7 +4,7 @@ let productId = params.get("id");  //récuperer l'id
 console.log(productId);
 
 
-let products = [];
+let articles = [];
 
 const getProducts = async () => {
     await fetch(`http://localhost:3000/api/products/${productId}`)
