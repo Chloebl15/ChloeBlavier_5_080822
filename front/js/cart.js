@@ -124,13 +124,13 @@ const modifyQuantity = () => {
       let deleteColor = e.target.closest('article').getAttribute("data-color") //Rechercher la couleur du produit qu'on veut supprimer
       console.log(deleteColor)
 
-      let index = productInLocalStorage.findIndex(element => element.id == deleteId && element.color == deleteColor); 
+      let index = productInLocalStorage.findIndex(element => element.id == deleteId && element.color == deleteColor);
       console.log(index)
 
       productInLocalStorage[index].quantity = e.target.value  //cibler l'index(la position)
-      
+
       completeProductTable[index].quantity = e.target.value  // faire la même chose pour mettre à jour l'autre tableau
-      
+
 
       localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage));
 
@@ -140,3 +140,46 @@ const modifyQuantity = () => {
   })
 }
 
+///////////////////////////////// Formulaire ////////////////////////////////////
+
+
+
+const fistName = document.getElementById("firstname")
+const lastName = document.getElementById("lastname")
+const adress = document.getElementById("address")
+const city = document.getElementById("city")
+const email = document.getElementById("email")
+
+let valueFirstName, valueLastName, valueAdress, valueCity, valueEmail;
+
+firstName.addEventListener("input", function (e) {   //écouter le input de firstName
+  valueFirstName;
+  if (e.target.value.length == 0) {    //si il n'y a rien écrit 
+    console.log("rien");
+    firstNameErrorMsg.innerHTML = "";
+    valueFirstName = null;
+    console.log(valueFirstName)
+  }
+
+  else if (e.target.value.length < 3 || e.target.value.length > 25) {
+    firstNameErrorMsg.innerHTML = "Le prénom doit contenir entre 3 et 25 caractères";
+    valueFirstName = null;
+
+
+  }
+
+  if (e.target.value.match(/^[a-z A-Z]{3,25}$/)) {  //entre 3 et 25 caratères
+    firstNameErrorMsg.innerHTML = ""
+    valuefirstName = e.target.value
+    console.log(valueFirstName);
+  }
+  if (
+    !e.target.value.match(/^[a-z A-Z]{3,25}$/) &&   //!différent de 
+    e.target.value.length > 3 && 
+    e.target.value.length < 25 
+    ) {
+      firstNameErrorMsg.innerHTML = "Le prénom ne doit pas contenir de caractères spéciaux ou de chiffres";
+      valueFirstName = null;
+      
+  }
+});
