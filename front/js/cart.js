@@ -143,43 +143,82 @@ const modifyQuantity = () => {
 ///////////////////////////////// Formulaire ////////////////////////////////////
 
 
+function validFirstName() {
+  let firstName = document.getElementById("firstName").value;
+  let text = document.getElementById("firstNameErrorMsg");
+  let pattern = /^(?=.{2,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$/;
 
-const fistName = document.getElementById("firstname")
-const lastName = document.getElementById("lastname")
-const adress = document.getElementById("address")
-const city = document.getElementById("city")
-const email = document.getElementById("email")
-
-let valueFirstName, valueLastName, valueAdress, valueCity, valueEmail;
-
-firstName.addEventListener("input", function (e) {   //écouter le input de firstName
-  valueFirstName;
-  if (e.target.value.length == 0) {    //si il n'y a rien écrit 
-    console.log("rien");
-    firstNameErrorMsg.innerHTML = "";
-    valueFirstName = null;
-    console.log(valueFirstName)
+  if (firstName.match(pattern)) {
+    console.log("Prénom valide!")
+  } else {
+    text.innerHTML = "Merci de rentrer un prénom valide";
   }
+}
 
-  else if (e.target.value.length < 3 || e.target.value.length > 25) {
-    firstNameErrorMsg.innerHTML = "Le prénom doit contenir entre 3 et 25 caractères";
-    valueFirstName = null;
+function validLastName() {
+  let lastName = document.getElementById("lastName").value;
+  let text = document.getElementById("lastNameErrorMsg");
+  let pattern = /^(?=.{2,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$/;
 
-
+  if (lastName.match(pattern)) {
+    console.log("Nom valide!")
+  } else {
+    text.innerHTML = "Merci de rentrer un nom valide";
   }
+}
 
-  if (e.target.value.match(/^[a-z A-Z]{3,25}$/)) {  //entre 3 et 25 caratères
-    firstNameErrorMsg.innerHTML = ""
-    valuefirstName = e.target.value
-    console.log(valueFirstName);
+function validAddress() {
+  let address = document.getElementById("address").value;
+  let text = document.getElementById("addressErrorMsg");
+  let pattern = ("^[A-zÀ-ú0-9 ,.'\-]+$");
+
+  if (address.match(pattern)) {
+    console.log("Adresse valide!")
+  } else {
+    text.innerHTML = "Merci de rentrer une adresse valide";
   }
-  if (
-    !e.target.value.match(/^[a-z A-Z]{3,25}$/) &&   //!différent de 
-    e.target.value.length > 3 && 
-    e.target.value.length < 25 
-    ) {
-      firstNameErrorMsg.innerHTML = "Le prénom ne doit pas contenir de caractères spéciaux ou de chiffres";
-      valueFirstName = null;
-      
+}
+
+function validCity() {
+  let city = document.getElementById("city").value;
+  let text = document.getElementById("cityErrorMsg");
+  let pattern = ("^[A-zÀ-ú0-9 ,.'\-]+$");
+
+  if (city.match(pattern)) {
+    console.log("Ville valide!")
+  } else {
+    text.innerHTML = "Merci de rentrer une ville valide";
   }
-});
+}
+
+function validEmail() {
+  let email = document.getElementById("email").value;
+  let text = document.getElementById("emailErrorMsg");
+  let pattern = ("^[a-zA-Z0-9_. -]+@[a-zA-Z.-]+[.]{1}[a-z]{2,10}$");
+
+  if (email.match(pattern)) {
+    console.log("Email valide!")
+  } else {
+    text.innerHTML = "Merci de rentrer une email valide";
+  }
+}
+
+
+
+
+
+const formulaire = () => {
+
+  order.addEventListener("click", () => {
+    validFirstName()
+    validLastName()
+    validAddress()
+    validCity()
+    validEmail()
+
+  })
+
+}
+
+
+formulaire()
