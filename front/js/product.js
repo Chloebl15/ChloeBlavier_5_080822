@@ -169,16 +169,16 @@ function styleError(){
 }
 
 function colorMissing(){
-    document.querySelector(".missingColor").textContent = "Merci de bien choisir une couleur"
+    document.querySelector(".missingColor").textContent = "Veuillez choisir une couleur"
     styleError();
 } 
 
 function quantityMissing(){
-    document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité de produit compris entre 1 et 100";
+    document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité entre 1 et 100";
     styleError()
 }
 
 function productAdded(){
-    document.querySelector(".productAdded").textContent ="Votre commande a été ajoutée au panier";
+    document.querySelector(".productAdded").textContent ="Le produit a bien été ajouté au panier";
     style();
 }
