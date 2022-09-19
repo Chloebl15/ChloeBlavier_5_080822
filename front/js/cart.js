@@ -4,6 +4,7 @@ console.log(productInLocalStorage)
 
 let completeProductTable = [];
 
+
 const getArticles = async () => {
   for (productLS of productInLocalStorage) {
     await fetch(`http://localhost:3000/api/products/${productLS.id}`)
@@ -98,7 +99,7 @@ const removeProduct = () => {
       let searchDeleteProduct = productInLocalStorage.find(element => element.id == deleteId && element.color == deleteColor); //On recherche le produit dans producTable. element.id = à l'id récupéré (idem pour la couleur)
       productInLocalStorage = productInLocalStorage.filter(element => element != searchDeleteProduct); //filter renvoie tous les produits qui sont dans ma condition. //supprime 
       completeProductTable = completeProductTable.filter(element => element != searchDeleteProduct); // faire la même chose pour mettre à jour l'autre tableau
-      localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage)); //????????
+      localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage));
 
       const deleteProduct = e.target.closest("article");   //Cibler le bloc HTML  
       deleteProduct.remove();  //supprimer le bloc HTML ciblé 
@@ -150,8 +151,10 @@ function validFirstName() {
 
   if (firstName.match(pattern)) {
     console.log("Prénom valide!")
+    return true;
   } else {
     text.innerHTML = "Merci de rentrer un prénom valide";
+    return false;
   }
 }
 
@@ -162,8 +165,10 @@ function validLastName() {
 
   if (lastName.match(pattern)) {
     console.log("Nom valide!")
+    return true;
   } else {
     text.innerHTML = "Merci de rentrer un nom valide";
+    return false;
   }
 }
 
@@ -174,8 +179,10 @@ function validAddress() {
 
   if (address.match(pattern)) {
     console.log("Adresse valide!")
+    return true;
   } else {
     text.innerHTML = "Merci de rentrer une adresse valide";
+    return false;
   }
 }
 
@@ -186,8 +193,10 @@ function validCity() {
 
   if (city.match(pattern)) {
     console.log("Ville valide!")
+    return true;
   } else {
     text.innerHTML = "Merci de rentrer une ville valide";
+    return false;
   }
 }
 
@@ -198,8 +207,10 @@ function validEmail() {
 
   if (email.match(pattern)) {
     console.log("Email valide!")
+    return true;
   } else {
-    text.innerHTML = "Merci de rentrer une email valide";
+    text.innerHTML = "Merci de rentrer un email valide";
+    return false;
   }
 }
 
@@ -207,18 +218,73 @@ function validEmail() {
 
 
 
-const formulaire = () => {
+const messagesFormulaire = () => {
 
-  order.addEventListener("click", () => {
+  order.addEventListener("click", (e) => {
+    e.preventDefault(); //stopper le click
     validFirstName()
     validLastName()
     validAddress()
     validCity()
     validEmail()
 
+  
+
+    if (validFirstName() && validLastName() && validAddress() && validCity() && validEmail()) {  //tout est retourné en true on envoie
+      console.log("envoyé")
+      sendorder()
+
+    }
+  
   })
 
+  
 }
 
 
-formulaire()
+messagesFormulaire()
+
+
+const sendorder = async () => {
+  const finalOrder = JSON.parse(localStorage.getItem("localStorageProduct")); //récupérer les produits dans le localstorage
+  let orderId = [];   //créer un tableau vide
+  console.log(finalOrder);
+  console.log(orderId);
+
+  finalOrder.forEach((order) => {
+    orderId.push(order.id);                 //push dans le tableau
+  });
+
+
+    const order = fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contact : {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value
+      },
+      products : orderId
+    })
+  })
+
+  .then((res) => {
+    return res.json()
+  })
+  .then ((data) => {
+    console.log(data)
+    window.location.href = `confirmation.html?commande=${data.orderId}`;
+  })
+
+ .catch((error) => {
+            // Si erreur dans URL, retourner l'erreur
+            console.log(error);
+            //afficher l'erreur 
+        })
+}

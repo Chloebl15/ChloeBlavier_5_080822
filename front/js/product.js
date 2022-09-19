@@ -1,5 +1,4 @@
 let params = new URLSearchParams(window.location.search);
-//peut-on utiliser (document.location.search) ?
 let productId = params.get("id");  //récuperer l'id
 console.log(productId);
 
@@ -65,7 +64,7 @@ const addBasket = () => {
         console.log(select.value);
         console.log(productTable) //null 
 
-     
+
 
 
 
@@ -95,7 +94,7 @@ const addBasket = () => {
         }
 
 
-        
+
         // Si le LocalStorage tableau n'est pas null
         else if (productTable !== null) {
             console.log("le local storage n'est pas vide")
@@ -122,32 +121,64 @@ const addBasket = () => {
                 productTable.push(newProduct)
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
             }
-            
+
         }
-
-
 
         // pop-up 
         const popupAlert = () => {
-            
-        }
-        
-        if(select.value == '') {
-            (window.alert (`Veuillez sélectionner une couleur s'il vous plaît.`))
+
         }
 
-        else if (quantity.value <1 ) {
-            (window.alert (`Veuillez sélectionner une quantité s'il vous plaît.`))
+        if (select.value == '') {
+
+            colorMissing();
+
+
         }
 
+        else if (quantity.value < 1 || quantity.value > 100) {
+
+            quantityMissing()
+
+        }
         else {
-    
-            (window.confirm (`Le canapé ${products.name} de couleur ${select.value} a bien été ajouté au panier.`))
+            productAdded()
+
         }
 
         popupAlert();
-        
+
     })
-    
-    
+
+
+}
+
+let newDiv = document.createElement("div");
+newDiv.classList.add("missingColor", "missingQuantity", "productAdded");
+let currentDiv = document.querySelector(`.item__content__settings__quantity`);
+let parentDiv = currentDiv.parentNode
+
+parentDiv.insertBefore(newDiv, currentDiv.nextSibling)
+
+function styleError(){
+    newDiv.style.color = "rgb(240, 54, 54)";
+}
+
+ function style(){
+    newDiv.style.color = "green";
+}
+
+function colorMissing(){
+    document.querySelector(".missingColor").textContent = "Merci de bien choisir une couleur"
+    styleError();
+} 
+
+function quantityMissing(){
+    document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité de produit compris entre 1 et 100";
+    styleError()
+}
+
+function productAdded(){
+    document.querySelector(".productAdded").textContent ="Votre commande a été ajoutée au panier";
+    style();
 }
