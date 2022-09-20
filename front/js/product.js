@@ -80,6 +80,59 @@ const addBasket = () => {
         }
 
         //popup
+        let newDiv = document.createElement("div");
+        newDiv.classList.add("missingColor", "missingQuantity", "productAdded");
+        let currentDiv = document.querySelector(`.item__content__settings__quantity`);
+        let parentDiv = currentDiv.parentNode
+
+        parentDiv.insertBefore(newDiv, currentDiv.nextSibling)
+
+        function styleError(){
+            newDiv.style.color = "rgb(240, 54, 54)";
+        }
+
+        function style(){
+            newDiv.style.color = "green";
+        }
+
+        function colorMissing(){
+            document.querySelector(".missingColor").textContent = "Veuillez choisir une couleur"
+            styleError();
+        } 
+
+        function quantityMissing(){
+            document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité entre 1 et 100";
+            styleError()
+        }
+
+        function productAdded(){
+            document.querySelector(".productAdded").textContent ="Le produit a bien été ajouté au panier";
+            style();
+        }
+        
+        const popupAlert = () => {
+
+        }
+
+        if (select.value == '') {
+            colorMissing();
+             return(
+                quantity.value == NaN
+            )
+        }
+
+        else if (quantity.value < 1 || quantity.value > 100) {
+            quantityMissing()
+
+            quantity.value = 1;
+            return(
+                quantity.value == NaN
+            )
+        }
+        else {
+            productAdded()
+        }
+        popupAlert();
 
 
         // SI aucun produit dans le LS
@@ -114,71 +167,21 @@ const addBasket = () => {
                 console.log("LS avec quantité ajustée", productTable[findIndexObject])
                 // On met à jour le LS
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+
             }
+            
             // Si le produit n'existe pas dans le LS
             else {
                 // On a juste à pousser le nouveau produit dans le LS
                 productTable.push(newProduct)
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
             }
-
+     
         }
 
         // pop-up 
-        const popupAlert = () => {
-
-        }
-
-        if (select.value == '') {
-
-            colorMissing();
-
-
-        }
-
-        else if (quantity.value < 1 || quantity.value > 100) {
-
-            quantityMissing()
-
-        }
-        else {
-            productAdded()
-
-        }
-
-        popupAlert();
 
     })
 
 
-}
-
-let newDiv = document.createElement("div");
-newDiv.classList.add("missingColor", "missingQuantity", "productAdded");
-let currentDiv = document.querySelector(`.item__content__settings__quantity`);
-let parentDiv = currentDiv.parentNode
-
-parentDiv.insertBefore(newDiv, currentDiv.nextSibling)
-
-function styleError(){
-    newDiv.style.color = "rgb(240, 54, 54)";
-}
-
- function style(){
-    newDiv.style.color = "green";
-}
-
-function colorMissing(){
-    document.querySelector(".missingColor").textContent = "Veuillez choisir une couleur"
-    styleError();
-} 
-
-function quantityMissing(){
-    document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité entre 1 et 100";
-    styleError()
-}
-
-function productAdded(){
-    document.querySelector(".productAdded").textContent ="Le produit a bien été ajouté au panier";
-    style();
 }
