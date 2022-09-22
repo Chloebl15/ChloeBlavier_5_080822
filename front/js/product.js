@@ -109,7 +109,7 @@ const addBasket = () => {
             document.querySelector(".productAdded").textContent ="Le produit a bien été ajouté au panier";
             style();
         }
-        
+
         const popupAlert = () => {
 
         }
@@ -178,8 +178,6 @@ const addBasket = () => {
             }
      
         }
-
-        // pop-up 
 
     })
 

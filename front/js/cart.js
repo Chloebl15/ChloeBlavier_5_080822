@@ -280,6 +280,7 @@ const sendorder = async () => {
   .then ((data) => {
     console.log(data)
     window.location.href = `confirmation.html?commande=${data.orderId}`;
+    localStorage.clear();
   })
 
  .catch((error) => {
