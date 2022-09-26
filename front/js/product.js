@@ -3,6 +3,13 @@ let productId = params.get("id");  //récuperer l'id
 console.log(productId);
 
 
+let newDiv = document.createElement("div");
+        newDiv.classList.add("missingColor", "missingQuantity", "productAdded");
+        let currentDiv = document.querySelector(`.item__content__settings__quantity`);
+        let parentDiv = currentDiv.parentNode
+
+        parentDiv.insertBefore(newDiv, currentDiv.nextSibling)
+
 let articles = [];
 
 const getProducts = async () => {
@@ -64,14 +71,6 @@ const addBasket = () => {
         console.log(select.value);
         console.log(productTable) //null 
 
-
-
-
-
-        // Si color non sélectionnée : afficher message d'erreur en face de l'input
-        // Si qté n'est pas bonne : afficher message d'erreur en face de l'input
-        // Si tout va bien, tout est rempli, on peut passer à la suite
-
         // Création du produit à ajouter
         const newProduct = {
             color: select.value,
@@ -80,34 +79,10 @@ const addBasket = () => {
         }
 
         //popup
-        let newDiv = document.createElement("div");
-        newDiv.classList.add("missingColor", "missingQuantity", "productAdded");
-        let currentDiv = document.querySelector(`.item__content__settings__quantity`);
-        let parentDiv = currentDiv.parentNode
 
-        parentDiv.insertBefore(newDiv, currentDiv.nextSibling)
-
-        function styleError(){
-            newDiv.style.color = "rgb(240, 54, 54)";
-        }
-
-        function style(){
-            newDiv.style.color = "green";
-        }
-
-        function colorMissing(){
-            document.querySelector(".missingColor").textContent = "Veuillez choisir une couleur"
-            styleError();
-        } 
-
-        function quantityMissing(){
-            document.querySelector(".missingQuantity").textContent ="Veuillez choisir une quantité entre 1 et 100";
-            styleError()
-        }
-
-        function productAdded(){
-            document.querySelector(".productAdded").textContent ="Le produit a bien été ajouté au panier";
-            style();
+        function messageError(classe, message, couleur){
+            document.querySelector(classe).textContent = message;
+            newDiv.style.color = couleur;
         }
 
         const popupAlert = () => {
@@ -115,71 +90,75 @@ const addBasket = () => {
         }
 
         if (select.value == '') {
-            colorMissing();
+            messageError(".missingColor", "Veuillez choisir une couleur", "rgb(240, 54, 54)")
              return(
                 quantity.value == NaN
             )
         }
 
-        else if (quantity.value < 1 || quantity.value > 100) {
-            quantityMissing()
-
-            quantity.value = 1;
+       if (quantity.value < 1 || quantity.value > 100) {
+            messageError(".missingQuantity", "Veuillez choisir une quantité entre 1 et 100", "rgb(240, 54, 54")
+           
             return(
                 quantity.value == NaN
             )
         }
-        else {
-            productAdded()
-        }
-        popupAlert();
+        // Sinon, si tout est bon
+        if (quantity.value > 0 && quantity.value < 100 && select.value != '') {
+            messageError(".productAdded", "Le produit a bien été ajouté au panier", "green")
+            // Je fais la suite
+            // vérification du LS
+            //ajout dans le LS
 
+            // SI aucun produit dans le LS
 
-        // SI aucun produit dans le LS
-        if (productTable == null) {    //si le produit tableau est null 
-            productTable = []
-
-            console.log(newProduct)
-            productTable.push(newProduct)
-            //Envoyer dans le local storage avec .setItem .   On transforme le tableau (ProductTable) en string pour le stocker dans le localstorage.
-            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-
-        }
-
-
-
-        // Si le LocalStorage tableau n'est pas null
-        else if (productTable !== null) {
-            console.log("le local storage n'est pas vide")
-            console.log("Mon localstorage", productTable)
-
-
-            // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
-            let findIndexObject = productTable.findIndex(
-                (element) =>
-                    element.id === productId && element.color === select.value
-            );
-            console.log("index du produit si trouvé", findIndexObject);
-
-            if (findIndexObject > -1) {
-                // On ajuste la quantité
-                productTable[findIndexObject].quantity = parseInt(productTable[findIndexObject].quantity) + parseInt(newProduct.quantity);
-                console.log("LS avec quantité ajustée", productTable[findIndexObject])
-                // On met à jour le LS
-                localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-
-            }
-            
-            // Si le produit n'existe pas dans le LS
-            else {
-                // On a juste à pousser le nouveau produit dans le LS
+            if (productTable == null) {    //si le produit tableau est null 
+                productTable = []
+    
+                console.log(newProduct)
                 productTable.push(newProduct)
+                //Envoyer dans le local storage avec .setItem .   On transforme le tableau (ProductTable) en string pour le stocker dans le localstorage.
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+    
             }
      
         }
+        
+    
 
     })
+}
+
+const verifyBasket = () => {
 
 
+    // Si le LocalStorage tableau n'est pas null
+    if (productTable !== null) {
+        console.log("le local storage n'est pas vide")
+        console.log("Mon localstorage", productTable)
+
+
+        // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
+        let findIndexObject = productTable.findIndex(
+            (element) =>
+                element.id === productId && element.color === select.value
+        );
+        console.log("index du produit si trouvé", findIndexObject);
+
+        if (findIndexObject > -1) {
+            // On ajuste la quantité
+            productTable[findIndexObject].quantity = parseInt(productTable[findIndexObject].quantity) + parseInt(newProduct.quantity);
+            console.log("LS avec quantité ajustée", productTable[findIndexObject])
+            // On met à jour le LS
+            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+
+        }
+        
+        // Si le produit n'existe pas dans le LS
+        else {
+            // On a juste à pousser le nouveau produit dans le LS
+            productTable.push(newProduct)
+            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+        }
+    }
 }

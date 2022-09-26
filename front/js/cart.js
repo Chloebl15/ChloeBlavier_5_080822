@@ -30,6 +30,8 @@ const getArticles = async () => {
 
 }
 
+
+
 const affichagePanier = async () => {
   await getArticles();
   calculTotal();
@@ -62,11 +64,14 @@ const affichagePanier = async () => {
 
   removeProduct();
   modifyQuantity();
+
+  
 }
 
-affichagePanier();
-
-
+//si productinlocalstorage n'est pas null, on affiche le panier (éviter message d'erreur quand on vide le panier après avoir passé commande)
+if (productInLocalStorage !== null){
+  affichagePanier();
+}
 
 const calculTotal = () => {
   let total = 0;
@@ -250,12 +255,18 @@ const sendorder = async () => {
   let orderId = [];   //créer un tableau vide
   console.log(finalOrder);
   console.log(orderId);
+ /*  if (finalOrder === null) {
+    alert("Votre panier est vide")
+  } */
+
 
   finalOrder.forEach((order) => {
     orderId.push(order.id);                 //push dans le tableau
   });
 
 
+
+  
     const order = fetch("http://localhost:3000/api/products/order", {
       method: "POST",
       headers: {
