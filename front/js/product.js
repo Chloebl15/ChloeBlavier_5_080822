@@ -121,44 +121,42 @@ const addBasket = () => {
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
     
             }
+    
+    
+    
+            // Si le LocalStorage tableau n'est pas null
+            else if (productTable !== null) {
+                console.log("le local storage n'est pas vide")
+                console.log("Mon localstorage", productTable)
+    
+    
+                // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
+                let findIndexObject = productTable.findIndex(
+                    (element) =>
+                        element.id === productId && element.color === select.value
+                );
+                console.log("index du produit si trouvé", findIndexObject);
+    
+                if (findIndexObject > -1) {
+                    // On ajuste la quantité
+                    productTable[findIndexObject].quantity = parseInt(productTable[findIndexObject].quantity) + parseInt(newProduct.quantity);
+                    console.log("LS avec quantité ajustée", productTable[findIndexObject])
+                    // On met à jour le LS
+                    localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+    
+                }
+                
+                // Si le produit n'existe pas dans le LS
+                else {
+                    // On a juste à pousser le nouveau produit dans le LS
+                    productTable.push(newProduct)
+                    localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+                }
+            }
      
         }
         
     
 
     })
-}
-
-const verifyBasket = () => {
-
-
-    // Si le LocalStorage tableau n'est pas null
-    if (productTable !== null) {
-        console.log("le local storage n'est pas vide")
-        console.log("Mon localstorage", productTable)
-
-
-        // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
-        let findIndexObject = productTable.findIndex(
-            (element) =>
-                element.id === productId && element.color === select.value
-        );
-        console.log("index du produit si trouvé", findIndexObject);
-
-        if (findIndexObject > -1) {
-            // On ajuste la quantité
-            productTable[findIndexObject].quantity = parseInt(productTable[findIndexObject].quantity) + parseInt(newProduct.quantity);
-            console.log("LS avec quantité ajustée", productTable[findIndexObject])
-            // On met à jour le LS
-            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-
-        }
-        
-        // Si le produit n'existe pas dans le LS
-        else {
-            // On a juste à pousser le nouveau produit dans le LS
-            productTable.push(newProduct)
-            localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-        }
-    }
 }
