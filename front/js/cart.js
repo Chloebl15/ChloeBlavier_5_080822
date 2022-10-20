@@ -31,7 +31,6 @@ const getArticles = async () => {
 }
 
 
-
 const affichagePanier = async () => {
   await getArticles();
   calculTotal();
@@ -78,7 +77,7 @@ const calculTotal = () => {
   let quantity = 0;
   for (product of completeProductTable) {
     total += parseInt(product.price) * parseInt(product.quantity)
-    quantity += parseInt(product.quantity)
+    quantity = parseInt(product.quantity)
   }
 
   console.log(total);
@@ -156,6 +155,7 @@ function validFirstName() {
 
   if (firstName.match(pattern)) {
     console.log("Prénom valide!")
+    text.innerHTML = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un prénom valide";
@@ -170,6 +170,7 @@ function validLastName() {
 
   if (lastName.match(pattern)) {
     console.log("Nom valide!")
+    text.innerHTML = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un nom valide";
@@ -184,6 +185,7 @@ function validAddress() {
 
   if (address.match(pattern)) {
     console.log("Adresse valide!")
+    text.innerHTML = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une adresse valide";
@@ -198,6 +200,7 @@ function validCity() {
 
   if (city.match(pattern)) {
     console.log("Ville valide!")
+    text.innerHTML = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une ville valide";
@@ -212,6 +215,7 @@ function validEmail() {
 
   if (email.match(pattern)) {
     console.log("Email valide!")
+    text.innerHTML = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un email valide";

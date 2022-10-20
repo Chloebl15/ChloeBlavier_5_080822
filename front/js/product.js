@@ -21,7 +21,6 @@ function messageError(classe, message, couleur) {
     secondDiv.style.color = couleur;
 }
 
-let articles = [];
 
 const getProducts = async () => {
     await fetch(`http://localhost:3000/api/products/${productId}`)
@@ -65,6 +64,7 @@ const productDisplay = async () => {
 
     });
     addBasket()  // on appelle la fonction dans productDisplay
+
 };
 
 
@@ -75,11 +75,6 @@ let productTable = JSON.parse(localStorage.getItem("localStorageProduct")) // Va
         let select = document.getElementById("colors")
         let quantity = document.getElementById("quantity")
 
-        const newProduct = {
-            color: select.value,
-            quantity: quantity.value,
-            id: productId
-        }
 
 const addBasket = () => {
 
@@ -89,47 +84,60 @@ const addBasket = () => {
         console.log(select.value);
         console.log(productTable) //null     
 
+        messageError(".missingColor", "")
+        messageError(".missingQuantity", "")
+
         //popup
         if (select.value == '') {
             messageError(".missingColor", "Veuillez choisir une couleur", "rgb(240, 54, 54)")
-             return(
-                quantity.value == NaN
-            )
+             
         }
 
        if (quantity.value < 1 || quantity.value > 100) {
             messageError(".missingQuantity", "Veuillez choisir une quantité entre 1 et 100", "rgb(240, 54, 54")
-           
-            return(
-                quantity.value == NaN
-            )
+            
         }
         // Sinon, si tout est bon
 
         if (quantity.value > 0 && quantity.value < 100 && select.value != '') {
             messageError(".productAdded", "Le produit a bien été ajouté au panier", "green")
+            messageError(".missingColor", "")
+
+            const newProduct = {
+                color: select.value,
+                quantity: quantity.value,
+                id: productId
+            }
+
+            console.log(newProduct)
+
+            if (productTable == null) {    //si le produit tableau est null 
+                productTable = []
+    
+                productTable.push(newProduct)
+                //Envoyer dans le local storage avec .setItem .   On transforme le tableau (ProductTable) en string pour le stocker dans le localstorage.
+                localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+                console.log("productTable")
+            }
+            else {verifyBasket(newProduct)
+                console.log("verifyBasket")
+             }
+
+        }
             // Je fais la suite
             // vérification du LS
             //ajout dans le LS
     
             // SI aucun produit dans le LS
-    
-            if (productTable == null) {    //si le produit tableau est null 
-                productTable = []
-    
-                console.log(newProduct)
-                productTable.push(newProduct)
-                //Envoyer dans le local storage avec .setItem .   On transforme le tableau (ProductTable) en string pour le stocker dans le localstorage.
-                localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
-    
-            }}
-            verifyBasket()
-    })
 }
+    
+    )}
 
-const verifyBasket = () => {
 
+const verifyBasket = (newProduct) => {
 
+    console.log(select.value)
+    console.log(productId)
         // Si le LocalStorage tableau n'est pas null
        if (productTable !== null) {
             console.log("le local storage n'est pas vide")
@@ -139,7 +147,7 @@ const verifyBasket = () => {
             // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
             let findIndexObject = productTable.findIndex(
                 (element) =>
-                    element.id === productId && element.color === select.value
+                    parseInt(element.id) === parseInt(productId) && toString(element.color) === toString(select.value)
             );
             console.log("index du produit si trouvé", findIndexObject);
 
@@ -157,6 +165,8 @@ const verifyBasket = () => {
                 // On a juste à pousser le nouveau produit dans le LS
                 productTable.push(newProduct)
                 localStorage.setItem("localStorageProduct", JSON.stringify(productTable));
+
+                console.log("produit qui n'existe pas dans le LS")
             }
         }
  
