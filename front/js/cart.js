@@ -83,6 +83,7 @@ const calculTotal = () => {
   console.log(total);
   document.getElementById("totalPrice").innerHTML = total
   document.getElementById("totalQuantity").innerHTML = quantity
+  
 }
 
 
@@ -155,7 +156,7 @@ function validFirstName() {
 
   if (firstName.match(pattern)) {
     console.log("Prénom valide!")
-    text.innerHTML = " ";
+    text.textContent = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un prénom valide";
@@ -170,7 +171,7 @@ function validLastName() {
 
   if (lastName.match(pattern)) {
     console.log("Nom valide!")
-    text.innerHTML = " ";
+    text.textContent = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un nom valide";
@@ -185,7 +186,7 @@ function validAddress() {
 
   if (address.match(pattern)) {
     console.log("Adresse valide!")
-    text.innerHTML = " ";
+    text.textContent = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une adresse valide";
@@ -200,7 +201,7 @@ function validCity() {
 
   if (city.match(pattern)) {
     console.log("Ville valide!")
-    text.innerHTML = " ";
+    text.textContent = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une ville valide";
@@ -215,7 +216,7 @@ function validEmail() {
 
   if (email.match(pattern)) {
     console.log("Email valide!")
-    text.innerHTML = " ";
+    text.textContent = " ";
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un email valide";
@@ -259,10 +260,6 @@ const sendorder = async () => {
   let orderId = [];   //créer un tableau vide
   console.log(finalOrder);
   console.log(orderId);
- /*  if (finalOrder === null) {
-    alert("Votre panier est vide")
-  } */
-
 
   finalOrder.forEach((order) => {
     orderId.push(order.id);                 //push dans le tableau

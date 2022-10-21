@@ -147,7 +147,7 @@ const verifyBasket = (newProduct) => {
             // Vérification si on trouve le même produit dans le LS, si oui, findIndex va retourner l'index du produit dans le LS
             let findIndexObject = productTable.findIndex(
                 (element) =>
-                    parseInt(element.id) === parseInt(productId) && toString(element.color) === toString(select.value)
+                    element.id === productId && element.color === select.value
             );
             console.log("index du produit si trouvé", findIndexObject);
 
