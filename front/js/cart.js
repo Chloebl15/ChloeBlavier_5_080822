@@ -63,6 +63,7 @@ const affichagePanier = async () => {
 
   removeProduct();
   modifyQuantity();
+  
 
   
 }
@@ -101,18 +102,20 @@ const removeProduct = () => {
       let deleteColor = e.target.closest('article').getAttribute("data-color") //Rechercher la couleur du produit qu'on veut supprimer
       console.log(deleteColor)
 
-      let searchDeleteProduct = productInLocalStorage.find(element => element.id == deleteId && element.color == deleteColor); //On recherche le produit dans producTable. element.id = à l'id récupéré (idem pour la couleur)
+      let searchDeleteProduct = completeProductTable.find(element => element.id == deleteId && element.color == deleteColor); //On recherche le produit dans producTable. element.id = à l'id récupéré (idem pour la couleur)
       productInLocalStorage = productInLocalStorage.filter(element => element != searchDeleteProduct); //filter renvoie tous les produits qui sont dans ma condition. //supprime 
       completeProductTable = completeProductTable.filter(element => element != searchDeleteProduct); // faire la même chose pour mettre à jour l'autre tableau
       localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage));
-
+   
       const deleteProduct = e.target.closest("article");   //Cibler le bloc HTML  
       deleteProduct.remove();  //supprimer le bloc HTML ciblé 
 
-
+      
       calculTotal();
+    
     })
   })
+
 }
 
 
