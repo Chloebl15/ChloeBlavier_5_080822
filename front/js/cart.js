@@ -31,6 +31,7 @@ const getArticles = async () => {
 }
 
 
+
 const affichagePanier = async () => {
   await getArticles();
   calculTotal();
@@ -63,7 +64,6 @@ const affichagePanier = async () => {
 
   removeProduct();
   modifyQuantity();
-  
 
   
 }
@@ -78,13 +78,12 @@ const calculTotal = () => {
   let quantity = 0;
   for (product of completeProductTable) {
     total += parseInt(product.price) * parseInt(product.quantity)
-    quantity = parseInt(product.quantity)
+    quantity += parseInt(product.quantity)
   }
 
   console.log(total);
   document.getElementById("totalPrice").innerHTML = total
   document.getElementById("totalQuantity").innerHTML = quantity
-  
 }
 
 
@@ -102,20 +101,20 @@ const removeProduct = () => {
       let deleteColor = e.target.closest('article').getAttribute("data-color") //Rechercher la couleur du produit qu'on veut supprimer
       console.log(deleteColor)
 
-      let searchDeleteProduct = completeProductTable.find(element => element.id == deleteId && element.color == deleteColor); //On recherche le produit dans producTable. element.id = à l'id récupéré (idem pour la couleur)
+      let searchDeleteProduct = productInLocalStorage.find(element => element.id == deleteId && element.color == deleteColor); //On recherche le produit dans producTable. element.id = à l'id récupéré (idem pour la couleur)
       productInLocalStorage = productInLocalStorage.filter(element => element != searchDeleteProduct); //filter renvoie tous les produits qui sont dans ma condition. //supprime 
       completeProductTable = completeProductTable.filter(element => element != searchDeleteProduct); // faire la même chose pour mettre à jour l'autre tableau
       localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage));
-   
+
       const deleteProduct = e.target.closest("article");   //Cibler le bloc HTML  
       deleteProduct.remove();  //supprimer le bloc HTML ciblé 
 
-      
+
       calculTotal();
-    
+      location.reload();
+
     })
   })
-
 }
 
 
@@ -144,6 +143,7 @@ const modifyQuantity = () => {
       localStorage.setItem("localStorageProduct", JSON.stringify(productInLocalStorage));
 
       calculTotal();
+      
 
     })
   })
@@ -159,7 +159,7 @@ function validFirstName() {
 
   if (firstName.match(pattern)) {
     console.log("Prénom valide!")
-    text.textContent = " ";
+    text.innerText = " "
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un prénom valide";
@@ -174,7 +174,7 @@ function validLastName() {
 
   if (lastName.match(pattern)) {
     console.log("Nom valide!")
-    text.textContent = " ";
+    text.innerText = " "
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un nom valide";
@@ -189,7 +189,7 @@ function validAddress() {
 
   if (address.match(pattern)) {
     console.log("Adresse valide!")
-    text.textContent = " ";
+    text.innerText = " "
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une adresse valide";
@@ -204,7 +204,7 @@ function validCity() {
 
   if (city.match(pattern)) {
     console.log("Ville valide!")
-    text.textContent = " ";
+    text.innerText = " "
     return true;
   } else {
     text.innerHTML = "Merci de rentrer une ville valide";
@@ -219,7 +219,7 @@ function validEmail() {
 
   if (email.match(pattern)) {
     console.log("Email valide!")
-    text.textContent = " ";
+    text.innerText = " "
     return true;
   } else {
     text.innerHTML = "Merci de rentrer un email valide";
@@ -263,6 +263,10 @@ const sendorder = async () => {
   let orderId = [];   //créer un tableau vide
   console.log(finalOrder);
   console.log(orderId);
+ /*  if (finalOrder === null) {
+    alert("Votre panier est vide")
+  } */
+
 
   finalOrder.forEach((order) => {
     orderId.push(order.id);                 //push dans le tableau
